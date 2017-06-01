@@ -6,13 +6,18 @@ MAINTAINER Svtplay https://github.com/Svtplay/download
 RUN apt-get update \
   && apt-get install -y phantomjs \
   && apt-get install -y ffmpeg \
+  && apt-get install -y curl \
   && apt-get install -y ruby \
   && gem install phantomjs
 
 COPY *.rb /
+COPY *.sh /
 
 RUN mkdir /downloads
+
+RUN /run_things.sh 'cat /etc/*release' 'curl --version' 'ruby -v' 'ffmpeg -version' 'phantomjs -v' > /info.txt
+
 EXPOSE 8066/tcp
-ENTRYPOINT ["webserver.rb"]
+#ENTRYPOINT ["webserver.rb"]
 CMD ["/bin/bash"]
 
