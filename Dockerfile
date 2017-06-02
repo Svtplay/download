@@ -29,8 +29,6 @@ RUN set -x \
  && rm -rf /tmp/* /var/lib/apt/lists/* \
     \
     # Run as non-root user.
- && useradd --system --uid 72379 -m --shell /usr/sbin/nologin phantomjs \
- && su phantomjs -s /bin/sh -c "phantomjs --version" \
  && gem install phantomjs \
  && mkdir /downloads \
  && mkdir /data
@@ -44,11 +42,8 @@ RUN /data/run_things.sh 'cat /etc/*release' \
         'ffmpeg -version' \
         'phantomjs -v' \
         'env'   \
-         > /data/info.txt \
- && chown phantomjs /downloads \
- && chown -R phantomjs /data
+         > /data/info.txt 
 
-USER phantomjs
 # ruby -E ISO-8859-1:UTF-8
 EXPOSE 8066
 ENTRYPOINT ["/data/webserver_loop.sh"]
