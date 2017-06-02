@@ -1,11 +1,11 @@
 require 'socket'
 require 'cgi'
 
-webserver = TCPServer.new('127.0.0.1', ARGV[0])
+webserver = TCPServer.new('0.0.0.0', ARGV[0])
 
 info=File.open("/data/info.txt", 'r').read()
 
-form="""
+form=<<-FOO
 <!DOCTYPE html>
 <html>
 <body>
@@ -21,24 +21,22 @@ INFOLOCATION
 </pre>
 </body>
 </html>
-""".sub! "INFOLOCATION" info
+FOO
 
-
+form=form.sub('INFOLOCATION',info)
 
 while (session = webserver.accept)
    session.print "HTTP/1.1 200/OK\r\nContent-type:text/html\r\n\r\n"
    request = session.gets
    trimmedrequest = CGI.unescape(request.gsub(/GET\ \//, '').gsub(/\ HTTP.*/, ''))
-   if ( trimmedrequest.downcase =~ /action(.*)url(.*)http(.*)/ )
-      print trimmedrequest
-      pid = spawn("./wait_pwd.sh");
+   if ( trimmedrequest.downcase =~ /action(.*)url(.*)http(.*)/  && trimmedrequest.split("=").length==2)
+      url = trimmedrequest.split("=")[1]
+      print url
+      pid = spawn("/data/download_start.sh " + url);
       Process.detach(pid)
    end
-   filename = "form.html"
    begin
-      displayfile = File.open(filename, 'r')
-      content = displayfile.read()
-      session.print content
+      session.print form
    rescue Errno::ENOENT
       session.print "File not found"
    end

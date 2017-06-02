@@ -37,7 +37,6 @@ RUN set -x \
 
 COPY *.rb /data/
 COPY *.sh /data/
-COPY *.html /data/
 
 RUN /data/run_things.sh 'cat /etc/*release' \
         'curl --version' \
@@ -51,7 +50,7 @@ RUN /data/run_things.sh 'cat /etc/*release' \
 
 USER phantomjs
 # ruby -E ISO-8859-1:UTF-8
-EXPOSE 8066/tcp
-ENTRYPOINT ["/data/webserver_loop.sh 8066"]
-CMD ["/bin/bash"]
+EXPOSE 8066
+ENTRYPOINT ["/data/webserver_loop.sh"]
+CMD ["/bin/echo"]
 
