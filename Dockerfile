@@ -50,11 +50,8 @@ RUN /data/run_things.sh 'cat /etc/*release' \
  && chown -R phantomjs /data
 
 USER phantomjs
-
 # ruby -E ISO-8859-1:UTF-8
-
-EXPOSE 8910
 EXPOSE 8066/tcp
-#ENTRYPOINT ["webserver.rb"]
+ENTRYPOINT ["/data/webserver_loop.sh 8066"]
 CMD ["/bin/bash"]
 
