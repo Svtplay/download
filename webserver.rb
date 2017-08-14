@@ -1,9 +1,9 @@
 require 'socket'
-require 'cgi'
+require 'uri'
 
 webserver = TCPServer.new('0.0.0.0', ARGV[0])
 
-info=File.open("/data/info.txt", 'r').read()
+info=File.open("../data/info.txt", 'r').read()
 
 form=<<-FOO
 <!DOCTYPE html>
@@ -27,12 +27,18 @@ form=form.sub('INFOLOCATION',info)
 
 while (session = webserver.accept)
    session.print "HTTP/1.1 200/OK\r\nContent-type:text/html\r\n\r\n"
-   request = session.gets
-   trimmedrequest = CGI.unescape(request.gsub(/GET\ \//, '').gsub(/\ HTTP.*/, ''))
-   if ( trimmedrequest.downcase =~ /action(.*)url(.*)http(.*)/  && trimmedrequest.split("=").length==2)
-      url = trimmedrequest.split("=")[1]
+   request = URI.unescape(session.gets)
+   print request
+   if ( request.include?('action') && request.include?('url=') )
+      url2 = request.split("=")[1]
+      url1 = url2.split(" ")[0]
+          if (request.include?('?'))
+                url = url1.split("?")[0]
+          else
+                url = url1
+          end
       print url
-      pid = spawn("/data/download_start.sh " + url);
+      pid = spawn("../data/download_start.sh " + url);
       Process.detach(pid)
    end
    begin
@@ -42,3 +48,4 @@ while (session = webserver.accept)
    end
    session.close
 end
+
