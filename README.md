@@ -2,7 +2,11 @@
 
 ## Start container
 
-docker run -d  -p 8066:8066 -v ~/:/downloads svtplay/download
+docker run -d  -p 8066:8066 -v /my_local_exixting_dir:/downloads svtplay/download
+
+Will download an mp4 video in best quality (2796kbps)
+The file will end up in : /my_local_exixting_dir
+A work log file of will be placed there as well (called: svtdownload.3782.pid.log)
 
 ## Usage 
 
