@@ -9,9 +9,23 @@ form=<<-FOO
 <!DOCTYPE html>
 <html>
 <body>
+<script>
+
+window.onload = function() {
+	var url = new URL(window.location);
+	var c = url.searchParams.get("url");
+	console.log(c);
+	if (c === null ) {
+		// c is undefined or null
+	}else{
+		document.getElementById("exxx").value = c;
+	}
+};
+	
+</script>
 <form action="/action" method="get">
   Svtplay URL:<br>
-  <input size=120 type="text" name="url" value="https://www.svtplay.se/video/13851672/djursjukhuset/djursjukhuset-sasong-19-avsnitt-8">
+  <input size=120 type="text" name="url" id="exxx" value="https://www.svtplay.se/video/13851672/djursjukhuset/djursjukhuset-sasong-19-avsnitt-8">
   <br>
   <input type="submit" value="Download">
 </form>
