@@ -46,6 +46,6 @@ RUN /data/run_things.sh 'cat /etc/*release' \
 
 # ruby -E ISO-8859-1:UTF-8
 EXPOSE 8066
-ENTRYPOINT ["/data/webserver_loop.sh"]
+#ENTRYPOINT ["/data/webserver_loop.sh"]
 CMD ["/bin/echo"]
 
